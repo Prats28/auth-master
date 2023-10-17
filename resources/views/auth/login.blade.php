@@ -5,7 +5,7 @@
     <div class="text-center">
         <h1 class="font-bold text-2xl">Sign In</h1>
     </div>
-    
+
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
@@ -21,20 +21,24 @@
             <x-input-label for="password" :value="__('Password')" />
 
             <div class="flex items-center">
-                <x-text-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="current-password" />
+                <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
 
                 <!-- Password preview toggle -->
                 <span id="password-preview" class="absolute top-2 right-0 text-md cursor-pointer p-2" onclick="togglePasswordPreview('password',this)">
                     <i class="fa fa-eye" aria-hidden="true"></i>
                 </span>
             </div>
-        
+
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
+        <div  class="mt-4 relative">
+            <x-input-label for="one_time_password" :value="'One Time Password'" />
+            <p class="text-xs">Please enter the <strong>OTP</strong> generated on your Authenticator App. Ensure you submit the current one because it refreshes every 30 seconds.</p>
+            <x-text-input id="one_time_password" class="block mt-1 w-full" type="number" name="one_time_password"  required autofocus autocomplete="username" />
+            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        </div>
+       
         <!-- Remember Me -->
         <div class="block mt-4">
             <label for="remember_me" class="inline-flex items-center">
@@ -45,9 +49,9 @@
 
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
+            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
+                {{ __('Forgot your password?') }}
+            </a>
             @endif
 
             <x-primary-button class="ml-3">

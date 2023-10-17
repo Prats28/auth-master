@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Fortify;
@@ -19,9 +20,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -29,8 +30,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware(['2fa'])->group(function () {
+   
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::post('/2fa', function () {
+        return redirect(route('dashboard'));
+    })->name('2fa');
+});
+
 Fortify::twoFactorChallengeView(function () {
     return view('auth.two-factor-challenge');
 });
-
+Route::get('/complete-registration', [DashboardController::class, 'completeRegistration'])->name('complete.registration');
 require __DIR__.'/auth.php';

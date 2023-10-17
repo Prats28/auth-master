@@ -38,12 +38,19 @@ class RegisteredUserController extends Controller
             'terms_and_conditions' => ['accepted'],
         ]);
 
+        $google2fa = app('pragmarx.google2fa');
+        $google2fa_secret = $google2fa->generateSecretKey();
+  
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'terms_and_conditions' => 1,
+            'google2fa_secret' => $google2fa_secret,
         ]);
+
+        $request->session()->flash('registration_data', $user);
 
         // Send the verification email
         $user->sendEmailVerificationNotification();
@@ -54,4 +61,5 @@ class RegisteredUserController extends Controller
 
         return redirect(RouteServiceProvider::HOME);
     }
+
 }
